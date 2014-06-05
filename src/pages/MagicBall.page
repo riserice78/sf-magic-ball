@@ -1,0 +1,130 @@
+<apex:page showHeader="false" standardStylesheets="false">
+<style>
+    .mainContainer{
+        width: 90%;
+        margin: 10% auto;
+    }
+    .circle {
+        display: block;
+        background: black;
+        border-radius: 50%;
+        height: 300px;
+        width: 300px;
+        margin: 0;
+        background: -webkit-radial-gradient(120px 120px, circle, #777, #000);
+        background: radial-gradient(120px 120px, circle, #777, #000);
+    }
+    .answer{
+        display: block;
+        border-radius: 50%;
+        background: -webkit-radial-gradient(30px 40px, circle, rgba(186,20,97,1), rgba(35,83,138,1));
+        background: radial-gradient(30px 40px, circle, rgba(186,20,97,1), rgba(35,83,138,1));
+        -webkit-box-shadow: inset -5px -5px 1px rgba(0, 0, 0, 0.7);
+        box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.4);
+        position: absolute;
+        height: 150px;
+        width: 150px;
+        margin: 60px 75px;
+    }
+    .circle .answer::before {
+        display: block;
+        font-size: 20px;
+        margin-top: 50px;
+        color: white;
+        font-weight: bold;
+        text-align: center;
+        text-shadow: 1px 1px 1px #ddd;
+        content: attr(data-content);
+    }
+    /* ipad */
+    @media only screen and (min-device-width : 768px) and (max-device-width : 1024px) {
+        .circle{
+            margin-top: 90px;
+            margin-left: 70px;
+        }    
+    }
+    /* iphone */
+    @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+        .circle{
+            margin-top: 90px;
+            height: 250px;
+            width: 250px;
+        }
+        .circle .answer{
+            height: 120px;
+            width: 120px;
+            margin: 55px 65px;
+        }
+        .circle .answer::before {
+            font-size: 14px;
+            margin: 40px 10px;
+        }
+    }
+
+
+</style>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        init8Ball();
+        if (window.DeviceMotionEvent==undefined) {
+            alert('nayy');
+        }else{
+            var showTime = 20000;
+            window.addEventListener('devicemotion', function () {
+                if(event.acceleration.x > 15 || event.acceleration.y > 15){
+                    $answer = $('.circle .answer');
+                    $answer.fadeOut('slow', function(){
+                        $answer.attr('data-content', 'もっと優しくしてください～');
+                        $answer.fadeIn('slow', function(){
+                            setTimeout(function() {
+                                init8Ball();
+                            }, showTime);
+                        });
+                    });
+                }else if(event.acceleration.x > 2 && event.acceleration.y > 2){
+                    $answer = $('.circle .answer');
+                    $answer.fadeOut('slow', function(){
+                        $answer.attr('data-content', getAnswer());
+                        $answer.fadeIn('slow', function(){
+                            setTimeout(function() {
+                                init8Ball();
+                            }, showTime);
+                        });
+                    });
+                }else if(event.acceleration.x == 0 && event.acceleration.y == 0){
+                    init8Ball();
+                }
+            }, true);
+        }
+    });
+
+    function getAnswer(){
+        var randomAnswer = Math.floor((Math.random() * 10) + 1);
+        var answerString = '';
+        switch(randomAnswer) {
+            case 1: answerString = 'やめたほうがいいよ'; break;
+            case 2: answerString = '考えておく'; break;
+            case 3: answerString = 'また後で聞いてください'; break;
+            case 4: answerString = '多分'; break;
+            case 5: answerString = '難しいね'; break;
+            case 6: answerString = 'いいかもね'; break;
+            case 7: answerString = '好きにすれば'; break;
+            case 8: answerString = 'もちろん！'; break;
+            case 9: answerString = 'そうね'; break;
+            default: answerString = 'どうなんだろう';
+        }
+        return answerString;
+    }
+    
+    function init8Ball(){
+        $('.circle .answer').attr('data-content', '~質問を聞いてください~');
+    }
+</script>
+
+<div class="mainContainer">
+    <figure class="circle">
+        <span class="answer" id="answer"></span>
+    </figure>
+</div>
+</apex:page>

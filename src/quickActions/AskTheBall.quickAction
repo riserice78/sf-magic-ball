@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QuickAction xmlns="http://soap.sforce.com/2006/04/metadata">
+    <height>250</height>
+    <icon>icon8Ball</icon>
+    <label>相談窓口</label>
+    <page>MagicBall</page>
+    <type>VisualforcePage</type>
+    <width>-100</width>
+</QuickAction>
